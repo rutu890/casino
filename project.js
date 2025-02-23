@@ -101,7 +101,7 @@ const transpose = (reels) => {
 const printRows= (rows) => {
     for(const row of rows) {
         //let rowString = " A | B | C ";
-        let rowString = "A";
+        let rowString = "";
         for (const [i, symbol] of row.entries()) {
             rowString += symbol
             if (i != row.length -1 ) {
@@ -113,13 +113,69 @@ const printRows= (rows) => {
     }
 }
 
+const getWinnings = (rows, bet, lines) => {
+    let winnings=0;
 
-//const depositAmount=deposit();
-let balance=deposit();
-const numberOfLines=getNumberOfLines();
-const bet = getbet(balance,numberOfLines);
-const reels = spin();
-const rows=transpose(reels);
+    for(let row=0; row < lines ; row++) {
+        const symbols=rows[row];
+        let allSame = true;
+
+        for (const symbol of symbols) {
+            if (symbol != symbols[0]) {
+                allSame = false;
+                break;
+            }
+        }
+
+        if (allSame) {
+            winnings += bet * SYMBOLS_VALUES[symbols[0]]
+        }
+    }
+    return winnings;
+}
+
+
+const game = () => {
+
+    //const depositAmount=deposit();
+ let balance=deposit();
+
+ while(true){
+
+    console.log("You have balance of $" + balance);
+
+    const numberOfLines=getNumberOfLines();
+    const bet = getbet(balance,numberOfLines);
+
+     balance -= bet * numberOfLines;
+
+     const reels = spin();
+     const rows=transpose(reels);
+
+    printRows(rows);
+    const winnings = getWinnings(rows, bet, numberOfLines)
+    balance += winnings;
+    //check bet -- if bet is total bet its not what we want, we want bet per line
+
+    console.log("You won, $" + winnings.toString())
+
+    if (balance <= 0) {
+    console.log("You ran out of money...!");
+    break;
+ }
+  const playAgain = prompt("Do you want to play again? (y/n) ")
+
+  if (playAgain != "y") break;
+
+
+ }
+};
+
+game();
+
+
+
+
 
 
 
