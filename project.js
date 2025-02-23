@@ -160,7 +160,7 @@ const game = () => {
     console.log("You won, $" + winnings.toString())
 
     if (balance <= 0) {
-    console.log("You ran out of money...!");
+    console.log("Sorry, You ran out of money...!");
     break;
  }
   const playAgain = prompt("Do you want to play again? (y/n) ")
